@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>Blockchain explorer</title>
+  </head>
+  <body>
+    <table id="blocks" width="100%">
+      <tr>
+        <th>Number</th>
+        <th>Hash</th>
+        <th>Timestamp</th>
+      </tr>
+    </table>
+
+    <script
+      charset="utf-8"
+      src="https://cdn.ethers.io/scripts/ethers-v4.min.js"
+      type="text/javascript"
+    ></script>
+    <script>
+      var defaultProvider = ethers.getDefaultProvider("homestead");
+      ethers.onready = (function() {
+        updateBlocks();
+      })();
+
+      function updateBlocks() {
+        defaultProvider.getBlockNumber().then(number => {
+          for (let i = 0; i < 10; i++) {
+            defaultProvider.getBlock(number - i).then(block => {
+              printBlock(block);
+            });
+          }
+        });
+      }
+
+      function printBlock(block) {
+        console.log(block);
+        let table = document.getElementById("blocks");
+        let row = table.insertRow(-1);
+        let cell1 = row.insertCell(0);
+
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+
+        cell1.innerHTML = block.number;
+        cell2.innerHTML = block.hash;
+        cell3.innerHTML = block.timestamp;
+      }
+    </script>
+  </body>
+</html>
